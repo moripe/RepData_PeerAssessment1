@@ -11,7 +11,7 @@ output:
 source("R_week2.R")
 ```
 
-#1. Loading and preprocessing the data
+-Loading and preprocessing the data
  
 ```{r, echo=TRUE} 
  activity<- read.csv("activity.csv", sep = ";", header=TRUE)
@@ -88,6 +88,9 @@ plot(row.names(time_series_data), time_series_data,
      col = "blue")
 ```
 
+![](instructions_fig/time_series.png) 
+
+
 #The 5-minute interval that, on average, contains the maximum number of steps
 ```{r, echo =TRUE}
 max_steps_interval <- which.max(time_series_data)
@@ -125,6 +128,8 @@ TotalSteps <- aggregate(steps ~ date, data = activity_NAfilled, sum, na.rm = TRU
 
 hist(TotalSteps$steps, main = "Daily Total Steps", xlab = "Steps per Day", col = "white")
 ```
+![](instructions_fig/daily_total_steps.png) 
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
 
@@ -145,3 +150,5 @@ stepsInterval2=aggregate(steps~interval+day,activity,mean)
 
 xyplot(steps~interval|factor(day),data=stepsInterval2,aspect=1/2,type="l")
 ```
+
+![](instructions_fig/weekend_wwekday.png).
