@@ -68,8 +68,8 @@ hist(data_dailysummary$steps,
 mean_steps=mean(data_dailysummary$steps)
 median_steps=median(data_dailysummary$steps)
 ```
-The mean is $`r mean_steps`$
-The median is $`r median_steps`$
+The mean is `r mean_steps`
+The median is `r median_steps`
 
 ```
 
