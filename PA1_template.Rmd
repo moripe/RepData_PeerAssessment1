@@ -68,18 +68,80 @@ hist(data_dailysummary$steps,
 mean_steps=mean(data_dailysummary$steps)
 median_steps=median(data_dailysummary$steps)
 ```
-The mean is `r mean_steps`
-The median is `r median_steps`
 
-```
+
 
 
 ## What is the average daily activity pattern?
 
+#Time Series of the Average number of steps taken
 
+```{r, echo =TRUE}
+time_series_data <- tapply(activity$steps, activity$interval, mean, na.rm = TRUE)
+
+
+plot(row.names(time_series_data), time_series_data, 
+     type = "l", 
+     xlab = "5-min interval", 
+     ylab = "Average Steps per 5-min interval", 
+     main = "Time Series of the Average number of steps taken", 
+     col = "blue")
+```
+
+#The 5-minute interval that, on average, contains the maximum number of steps
+```{r, echo =TRUE}
+max_steps_interval <- which.max(time_series_data)
+
+names(max_steps_interval)
+```
+## [1] "835"
 
 ## Imputing missing values
 
+#Using the approach to calculate the mean of the number of steps by 5-min interval
 
+StepsAverageByInterval <- aggregate(steps ~ interval, data = activity, FUN = mean)
 
+#Then creating a function to fill the average of steps at the intervals with value NA of the dataset with all observations
+```{r, echo =TRUE}
+NAFill <- numeric()
+for (i in 1:nrow(activity)) {
+  xi <- activity[i, ]
+  if (is.na(xi$steps)) {
+    steps <- subset(StepsAverageByInterval, interval == xi$interval)$steps
+  } else {
+    steps <- xi$steps
+  }
+  NAFill <- c(NAFill, steps)
+}
+
+activity_NAfilled <- activity
+activity_NAfilled$steps <- NAFilling
+```
+
+#histogram of the total number of steps taken each day after missing values are imputed
+```{r, echo =TRUE}
+TotalSteps <- aggregate(steps ~ date, data = activity_NAfilled, sum, na.rm = TRUE)
+
+hist(TotalSteps$steps, main = "Daily Total Steps", xlab = "Steps per Day", col = "white")
+```
 ## Are there differences in activity patterns between weekdays and weekends?
+
+
+#Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
+```{r, echo =TRUE}
+activity$day=ifelse(as.POSIXlt(as.Date(activity$date))$wday%%6==0,
+                          "weekend","weekday")
+                          ```
+# For Sunday and Saturday : weekend, Other days : weekday 
+```{r, echo =TRUE}
+activity$day=factor(activity$day,levels=c("weekday","weekend"))
+```
+# first add a character column for day of the week
+```{r, echo =TRUE}
+summary(activity)
+
+stepsInterval2=aggregate(steps~interval+day,activity,mean)
+
+xyplot(steps~interval|factor(day),data=stepsInterval2,aspect=1/2,type="l")
+```
