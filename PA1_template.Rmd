@@ -61,7 +61,7 @@ hist(data_dailysummary$steps,
      ylab="Freq", 
      col = "white")
 ```
-
+![](instructions_fig/total_steps_day.png) 
 
 -Calculate and report the mean and median of the total number of steps taken per day
 ```{r, echo =TRUE}
